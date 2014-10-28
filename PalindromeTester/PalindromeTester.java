@@ -21,6 +21,10 @@ public class PalindromeTester
       {
          System.out.println ("Enter a potential palindrome:");
          str = s.nextLine();
+         //
+         str = str.toLowerCase();
+         str = str.replaceAll("\\s","");
+         //
 
          left = 0;
          right = str.length() - 1;

@@ -66,7 +66,13 @@ Artifacts to Produce:
 	like or dislike and why? What was surprising or unexpected? What did you
 	learn? What questions do you still have? What advice would you offer next
 	year's students?
-
+*Grid Size: 25 by 25 grid
+*Live cells are black rocks.
+*Dead cells are empty cells.
+*Patterns: Multiple patterns are available, and they were chosen randomly.
+*The game runs indefinitely.
+*The time interval within generations lasts 1 second.
+*Edge cases do not wrap around.
 
 Submission:
 

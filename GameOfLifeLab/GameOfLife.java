@@ -4,13 +4,16 @@ import info.gridworld.actor.Rock;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.BoundedGrid;
 import info.gridworld.grid.Location;
+import info.gridworld.grid.UnboundedGrid;
+import java.util.ArrayList;
+
 
 /**
  * Game of Life starter code. Demonstrates how to create and populate the game using the GridWorld framework.
  * Also demonstrates how to provide accessor methods to make the class testable by unit tests.
  * 
- * @author @gcschmit
- * @version 18 July 2014
+ * @author @Annika Dugad
+ * @version 11 Nov 2014
  */
 public class GameOfLife
 {
@@ -18,13 +21,17 @@ public class GameOfLife
     private ActorWorld world;
     
     // the game board will have 5 rows and 5 columns
-    private final int ROWS = 5;
-    private final int COLS = 5;
+    private final int ROWS = 25;
+    private final int COLS = 25;
     
     // constants for the location of the three cells initially alive
-    private final int X1 = 0, Y1 = 2;
-    private final int X2 = 2, Y2 = 0;
-    private final int X3 = 2, Y3 = 1;
+    private final int X1 = 12, Y1 = 10;
+    private final int X2 = 12, Y2 = 11;
+    private final int X3 = 12, Y3 = 14;
+    private final int X4 = 12, Y4 = 15;
+    private final int X5 = 12, Y5 = 16;
+    private final int X6 = 11, Y6 = 13;
+    private final int X7 = 10, Y7 = 11;
 
     /**
      * Default constructor for objects of class GameOfLife
@@ -45,6 +52,7 @@ public class GameOfLife
         
         // display the newly constructed and populated world
         world.show();
+        
         
     }
     
@@ -73,6 +81,23 @@ public class GameOfLife
         Rock rock3 = new Rock();
         Location loc3 = new Location(X3, Y3);
         grid.put(loc3, rock3);
+        
+        Rock rock4 = new Rock();
+        Location loc4 = new Location(X4, Y4);
+        grid.put(loc4, rock4);
+        
+        Rock rock5 = new Rock();
+        Location loc5 = new Location(X5, Y5);
+        grid.put(loc5, rock4);
+        
+        Rock rock6 = new Rock();
+        Location loc6 = new Location(X6, Y6);
+        grid.put(loc6, rock4);
+        
+        Rock rock7 = new Rock();
+        Location loc7 = new Location(X7, Y7);
+        grid.put(loc7, rock4);
+        
     }
 
     /**
@@ -83,17 +108,65 @@ public class GameOfLife
      * @post    the world has been populated with a new grid containing the next generation
      * 
      */
-    private void createNextGeneration()
+    public void createNextGeneration()
     {
         /** You will need to read the documentation for the World, Grid, and Location classes
          *      in order to implement the Game of Life algorithm and leverage the GridWorld framework.
          */
         
         // create the grid, of the specified size, that contains Actors
+
         Grid<Actor> grid = world.getGrid();
+        ArrayList<Location> location = grid.getOccupiedLocations();
+        ArrayList<Location> live = new ArrayList<Location>();
+        ArrayList<Location> die = new ArrayList<Location>();
         
-        // insert magic here...
+        for(int i =0; i<location.size(); i++)
+        {
+            Location neighbor = location.get(i);
+            ArrayList<Location> neighbor1 = grid.getEmptyAdjacentLocations(neighbor);
+            for(int j =0; j<neighbor1.size();j++)
+            {
+                Location local = neighbor1.get(j);
+                ArrayList<Location> cell = grid.getOccupiedAdjacentLocations(local);
+                int num = cell.size();
+                if (num ==3)
+                {
+                    live.add(local);
+                }
+            }
+            
+            ArrayList<Location> neighbor2 = grid.getOccupiedAdjacentLocations(neighbor);
+            int num1 = neighbor2.size();
+            if(num1 < 2 || num1 > 3)
+            {
+                die.add(neighbor);
+            }
+        }
         
+        for (int i =0; i<live.size(); i++)
+        {
+            Location loc = live.get(i);
+            Rock rock = new Rock();
+            grid.put(loc,rock);
+        }
+        for (int j =0; j<die.size(); j++)
+        {
+            Location loc = die.get(j);
+            grid.remove(loc);
+        }
+    }
+
+    /**
+     * Generates and updates the grid associated with the world
+     *
+     * @pre     the game has been initialized
+     * 
+     */
+    public void gettheGrid()
+    {
+        Grid<Actor> grid = world.getGrid();
+        world.setGrid(grid);
     }
     
     /**
@@ -136,9 +209,16 @@ public class GameOfLife
      * Creates an instance of this class. Provides convenient execution.
      *
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws InterruptedException
     {
         GameOfLife game = new GameOfLife();
+        boolean condition = true;
+        while(condition)
+        {
+            Thread.sleep(1000);
+            game.createNextGeneration();
+            game.gettheGrid();
+        }
     }
 
 }
